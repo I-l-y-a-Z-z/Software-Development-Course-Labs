@@ -5,4 +5,19 @@ public class CourseNumbersArray {
         int[] registeredCourses = {1010, 1020, 2080, 2140, 2150, 2160};
 
     }
+    public static int[] addCourse(int[] registeredCourses, int newCourse){
+        int[] updatedCourses = new int[registeredCourses.length + 1];
+        for (int i = 0; i < registeredCourses.length; i++){
+            updatedCourses[i] = registeredCourses[i];
+        }
+        updatedCourses[updatedCourses.length - 1] = newCourse;
+        return updatedCourses;
+    }
+    public static void printCourses(int[] registeredCourses) {
+        System.out.println("---------Courses----------");
+        for (int course : registeredCourses){
+            System.out.println(course);
+        }
+        System.out.println("--------------------------")
+    }
 }
