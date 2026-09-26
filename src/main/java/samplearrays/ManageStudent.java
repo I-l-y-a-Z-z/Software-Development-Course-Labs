@@ -3,22 +3,36 @@ package samplearrays;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import static java.lang.Float.NaN;
+
 public class ManageStudent {
 
     // 2) Find the Oldest Student
     public static Student findOldest(Student[] students) {
-
+        Student oldest = new Student(0, "", 0);
+        for (Student student : students){
+            if (student.getAge() > oldest.getAge()) oldest = student;
+        }
         return oldest;
     }
 
     // 3) Count Adult Students (age >= 18)
     public static int countAdults(Student[] students) {
-
+        int out = 0;
+        for (Student student : students){
+            if (student.getAge() >= 18) out++;
+        }
+        return out;
     }
 
     // 4) Average Grade (returns NaN if no students or grades)
     public static double averageGrade(Student[] students) {
-
+        if (students.length == 0) return NaN;
+        double average = 0D;
+        for (Student student : students){
+            average += student.getGrade();
+        }
+        return average / students.length;
     }
 
     // 5) Search by Name (case-sensitive; change to equalsIgnoreCase if desired)
@@ -54,8 +68,12 @@ public class ManageStudent {
     // 1) Create an Array of Students + demos for all tasks
     public static void main(String[] args) {
         // Create & initialize array of 5 students
-
-
+        Student[] students = new Student[5];
+        students[0] = new Student(0, "Ilyas");
+        students[1] = new Student(1, "Yasser", 19);
+        students[2] = new Student(2, "Anass", 19, 18);
+        students[3] = new Student(3, "Latif");
+        students[4] = new Student(4, "Amine", 19);
         // Print all
         System.out.println("== All Students ==");
         for (Student s : arr) System.out.println(s);
