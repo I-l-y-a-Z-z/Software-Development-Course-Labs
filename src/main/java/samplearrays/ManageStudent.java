@@ -136,6 +136,30 @@ public class ManageStudent {
         // 10) Append new student
         Student hamid = new Student(5, "Hamid", 19);
         appendStudent(arr, hamid);
+
+        // Question 11.
+        Student[][] classrooms = new Student[2][3];
+        classrooms[0][0] = new Student(0, "Ilyas", 19, 16);
+        classrooms[0][1] = new Student(1, "Zakaria", 22, 15);
+        classrooms[0][2] = new Student(2, "Anass", 21, 14 );
+        classrooms[1][0] = new Student(10, "Rayon", 14, 13);
+        classrooms[1][1] = new Student(11, "Latif", 12, 17);
+        classrooms[1][2] = new Student(12, "Amine", 23, 18);
+
+        // Print all students :
+        for(Student[] classroom : classrooms){
+            System.out.println("Classroom : ");
+            for (Student student : classroom) {
+                System.out.print(student.toString() + "\n");
+            }
+        }
+
+        // Find the top Student :
+        for (Student[] classroom : classrooms){
+            sortByGradeDesc(classroom);
+            System.out.println("The top achiever in this classroom is :");
+            System.out.println(classroom[0].toString());
+        }
     }
 }
 
