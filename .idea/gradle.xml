@@ -4,11 +4,13 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="17 (2)" />
+        <option name="delegatedBuild" value="false" />
+        <option name="testRunner" value="PLATFORM" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Lab2-Java/arrays-cs-project" />
+        <option name="gradleJvm" value="#PROJECT_JDK" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Lab2-Java/arrays-cs-project" />
           </set>
         </option>
       </GradleProjectSettings>

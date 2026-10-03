@@ -1,42 +1,36 @@
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
-*.iml
-*.ipr
+# Build output and caches (at any lab depth)
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+build/
+target/
+.gradle/
+.kotlin/
+*.class
+*.log
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# Share the course project configuration, not personal or generated IDE files.
+**/.idea/**
+!/.idea/
+!/.idea/.gitignore
+!/.idea/modules.xml
+!/.idea/misc.xml
+!/.idea/compiler.xml
+!/.idea/encodings.xml
+!/.idea/gradle.xml
+!/.idea/vcs.xml
+*.iws
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Plain Java .iml files are intentionally tracked. Gradle generates its own.
+/Lab2-Java/arrays-cs-project/**/*.iml
 
-### VS Code ###
-.vscode/
+# Local migration backups and tool configuration
+/.local-backups/
+/.agents/
+/.codex/
+/.aws/
 
-### Mac OS ###
+# Machine-specific files and local environment variables
 .DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
