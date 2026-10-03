@@ -4,6 +4,13 @@ Java coursework in one Git repository and one IntelliJ IDEA project. Each lab or
 existing exercise project has its own module, so exercises can be built and run
 independently.
 
+The arrays project remains connected to
+[my Lab 2 fork](https://github.com/I-l-y-a-Z-z/arrays-cs-project), which is forked
+from [the professor's repository](https://github.com/fahd-kalloubi/arrays-cs-project).
+It is included here as a **Git subtree**: its actual files live in this repository,
+and Git can send just that folder's changes back to the fork. A normal clone of
+the course repository includes every lab; no submodule setup is needed.
+
 ## Open and run in IntelliJ IDEA
 
 1. Open **this repository's root folder** (`Software Development Course Labs`).
@@ -36,7 +43,7 @@ Gradle tasks remain available in the Gradle tool window.
 │   ├── LeapYearCalculator/      Plain Java module
 │   ├── SpeedConverter/          Plain Java module
 │   ├── TeenNumberChecker/       Plain Java module
-│   └── arrays-cs-project/       Linked Gradle project
+│   └── arrays-cs-project/       Linked Gradle project + Git subtree
 │       └── src/main/java/samplearrays/
 └── Lab3-Java/                   Plain Java module
     ├── Lab3.iml
@@ -66,30 +73,93 @@ Use one module per new lab. Modules do not need dependencies on earlier labs.
 Repeated class names in different labs remain separate when you run each class
 with its own module's classpath. Initialize Git only at the course root.
 
-## Push to GitHub
+## Connect the course repository to GitHub
 
-The course repository uses `main`. Create an **empty** GitHub repository (without
-an initial README, license, or `.gitignore`), then run these commands from the
-course root, replacing the example URL with your new repository's URL:
+The two GitHub repositories serve different purposes:
+
+| Remote | Repository | Branch | What it receives |
+| --- | --- | --- | --- |
+| `origin` | New `software-development-course-labs` repository | `main` | Every lab and the shared course setup |
+| `lab2-fork` | Existing `I-l-y-a-Z-z/arrays-cs-project` fork | `master` | Only `Lab2-Java/arrays-cs-project`, exported with Git subtree |
+
+Create an **empty**, separate GitHub repository named
+`software-development-course-labs` under `I-l-y-a-Z-z` (without an initial README,
+license, or `.gitignore`). From the course root, connect it and publish:
 
 ```bash
-git remote add origin https://github.com/YOUR_USERNAME/software-development-course-labs.git
+git remote add origin https://github.com/I-l-y-a-Z-z/software-development-course-labs.git
 git push -u origin main
 ```
 
-After each new lab or update:
+Use a different URL if you choose a different course repository name.
+Keep `origin` pointed at the course repository. The existing fork retains its
+standalone layout and its relationship with the professor's repository.
+
+### After a normal lab update
 
 ```bash
 git status
 git add .
 git diff --cached --stat
 git commit -m "Add Lab 4 exercises"
-git push
+git push origin main
 ```
 
 The shared IntelliJ configuration and plain Java `.iml` files are versioned.
 Generated files, Gradle caches, personal IDE settings, and local backups are
 ignored. Keep the Gradle wrapper scripts and wrapper JAR in Git.
+
+### Send Lab 2 changes to the existing fork
+
+Edit the arrays project in its current folder. Commit its changes separately so
+the commit message also makes sense in the fork:
+
+```bash
+git add Lab2-Java/arrays-cs-project
+git commit -m "Update Lab 2 array exercises"
+git subtree push --prefix=Lab2-Java/arrays-cs-project --rejoin lab2-fork master
+git push origin main
+```
+
+Commit or stash any other pending changes before the subtree command. The subtree
+push exports only the arrays project, with `src`, `build.gradle.kts`, and the other
+project files at the fork's root. `--rejoin` records the synchronization in the
+course history; the final `git push origin main` also publishes that record.
+
+**Use the subtree command to update the fork.** A regular `git push lab2-fork
+main:master` would send the entire course layout to it. Synchronization is manual:
+publishing the course repository alone does not update the fork.
+
+### Bring updates from the fork into the course
+
+With a clean working tree, run:
+
+```bash
+git subtree split --prefix=Lab2-Java/arrays-cs-project --rejoin
+git subtree pull --prefix=Lab2-Java/arrays-cs-project lab2-fork master
+git push origin main
+```
+
+The split records any local arrays commits before merging changes from the fork.
+If you also need changes from the professor, use GitHub's **Sync fork** on your
+existing fork first, then run these commands. Resolve any merge conflicts before
+pushing. If the subtree pull is in conflict and you want to cancel it, use
+`git merge --abort`.
+
+### On a fresh clone
+
+Cloning the course repository gives you all the files and the subtree history.
+Git only creates the `origin` remote automatically, so add the fork remote once:
+
+```bash
+git remote add lab2-fork https://github.com/I-l-y-a-Z-z/arrays-cs-project.git
+git config remote.pushDefault origin
+git fetch lab2-fork
+```
+
+These settings are already configured in the original working folder. The push
+default keeps ordinary pushes directed at the course repository. The subtree
+commands require Git's `subtree` command to be installed.
 
 ## Build outside IntelliJ
 
@@ -113,6 +183,10 @@ The arrays project's original commits are retained as ancestors of the course
 repository's `main` branch. The course setup commit relocates its files under
 `Lab2-Java/arrays-cs-project` and adds the other labs. Use `git log --follow -- path`
 to inspect a file across the move.
+
+A subsequent subtree registration joins the export history to the original fork
+commit, so Lab 2 updates can be pushed without rewriting the fork's history.
+Use `git log --first-parent --oneline` to see the course's main line of commits.
 
 On the original machine, `.local-backups/` also contains a complete Git bundle,
 the arrays project's previous Git metadata, and the previous per-project IntelliJ

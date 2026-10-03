@@ -17,6 +17,12 @@ target/
 !/.idea/encodings.xml
 !/.idea/gradle.xml
 !/.idea/vcs.xml
+# Preserve the fork's existing shared settings when exporting its subtree.
+!/Lab2-Java/arrays-cs-project/.idea/
+!/Lab2-Java/arrays-cs-project/.idea/.gitignore
+!/Lab2-Java/arrays-cs-project/.idea/gradle.xml
+!/Lab2-Java/arrays-cs-project/.idea/misc.xml
+!/Lab2-Java/arrays-cs-project/.idea/vcs.xml
 *.iws
 
 # Plain Java .iml files are intentionally tracked. Gradle generates its own.
