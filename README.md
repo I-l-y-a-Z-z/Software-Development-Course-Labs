@@ -109,26 +109,56 @@ The shared IntelliJ configuration and plain Java `.iml` files are versioned.
 Generated files, Gradle caches, personal IDE settings, and local backups are
 ignored. Keep the Gradle wrapper scripts and wrapper JAR in Git.
 
-### Send Lab 2 changes to the existing fork
+### Automatic synchronization with the Lab 2 fork
 
-Edit the arrays project in its current folder. Commit its changes separately so
-the commit message also makes sense in the fork:
+The versioned `.githooks/pre-push` [Git hook](https://git-scm.com/docs/githooks#_pre_push)
+is enabled in this working copy. Whenever
+you push an update to `origin/main`, it first exports the arrays folder from the
+exact commit being pushed and pushes that export to `lab2-fork/master`. This
+also runs on the first course push. Commit your edits, then push normally:
 
 ```bash
 git add Lab2-Java/arrays-cs-project
 git commit -m "Update Lab 2 array exercises"
-git subtree push --prefix=Lab2-Java/arrays-cs-project --rejoin lab2-fork master
 git push origin main
 ```
 
-Commit or stash any other pending changes before the subtree command. The subtree
-push exports only the arrays project, with `src`, `build.gradle.kts`, and the other
-project files at the fork's root. `--rejoin` records the synchronization in the
-course history; the final `git push origin main` also publishes that record.
+After the initial `git push -u origin main`, plain `git push` works too. Git clients
+such as IntelliJ also use the hook when Git hooks are enabled. Only committed
+files are published; uncommitted edits are left alone. The fork keeps its standalone layout
+with `src`, `build.gradle.kts`, and the other arrays files at its root. The hook
+does not change your branch or working files, and other branches and tags do not
+trigger synchronization. Commit arrays changes separately when possible so their
+commit messages also make sense in the fork.
+
+If the fork push fails (for example, authentication fails or the fork has newer
+commits), the course push stops. Bring newer fork commits into the course using
+the instructions below, then retry. The hook never force-pushes the fork. The two
+pushes are separate: if the fork succeeds but the course push subsequently fails,
+fix the course push error and retry the same command.
+
+This automation runs locally for pushes to the remote named `origin`; edits made
+on GitHub or pushes from another clone without the hook do not run it. Enable it
+in each fresh clone using the setup below. Avoid `git push --no-verify` for normal
+publishing because that skips the hook.
+
+Git also invokes pre-push hooks during `--dry-run` without telling the hook that
+it is a dry run. To preview a push without updating either repository, use:
+
+```bash
+git -c core.hooksPath=/dev/null push --dry-run origin main
+```
+
+To rerun fork synchronization manually, including when the course branch is
+already up to date on GitHub, use:
+
+```bash
+git subtree push --prefix=Lab2-Java/arrays-cs-project lab2-fork master
+```
 
 **Use the subtree command to update the fork.** A regular `git push lab2-fork
-main:master` would send the entire course layout to it. Synchronization is manual:
-publishing the course repository alone does not update the fork.
+main:master` would send the entire course layout to it. The hook handles the
+subtree export automatically during normal course pushes.
 
 ### Bring updates from the fork into the course
 
@@ -155,11 +185,17 @@ Git only creates the `origin` remote automatically, so add the fork remote once:
 git remote add lab2-fork https://github.com/I-l-y-a-Z-z/arrays-cs-project.git
 git config remote.pushDefault origin
 git fetch lab2-fork
+git config --local core.hooksPath .githooks
 ```
 
 These settings are already configured in the original working folder. The push
-default keeps ordinary pushes directed at the course repository. The subtree
-commands require Git's `subtree` command to be installed.
+default keeps ordinary pushes directed at the course repository. The hook and
+manual subtree commands require Git's `subtree` command to be installed and
+permission to push to both repositories.
+
+The hook's integration checks use temporary local repositories and never contact
+GitHub. Run them with
+`PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v`.
 
 ## Build outside IntelliJ
 
