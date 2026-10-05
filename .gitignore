@@ -1,4 +1,4 @@
-# Build output and caches (at any lab depth)
+# Generated files
 out/
 build/
 target/
@@ -7,34 +7,26 @@ target/
 *.class
 *.log
 
-# Share the course project configuration, not personal or generated IDE files.
+# Keep only the shared IntelliJ project settings.
 **/.idea/**
 !/.idea/
-!/.idea/.gitignore
 !/.idea/modules.xml
 !/.idea/misc.xml
 !/.idea/compiler.xml
 !/.idea/encodings.xml
 !/.idea/gradle.xml
 !/.idea/vcs.xml
-# Preserve the fork's existing shared settings when exporting its subtree.
-!/Lab2-Java/arrays-cs-project/.idea/
-!/Lab2-Java/arrays-cs-project/.idea/.gitignore
-!/Lab2-Java/arrays-cs-project/.idea/gradle.xml
-!/Lab2-Java/arrays-cs-project/.idea/misc.xml
-!/Lab2-Java/arrays-cs-project/.idea/vcs.xml
 *.iws
 
-# Plain Java .iml files are intentionally tracked. Gradle generates its own.
+# Plain Java modules are shared; Gradle generates its own module files.
 /Lab2-Java/arrays-cs-project/**/*.iml
 
-# Local migration backups and tool configuration
+# Local files
 /.local-backups/
 /.agents/
 /.codex/
 /.aws/
 
-# Machine-specific files and local environment variables
 .DS_Store
 Thumbs.db
 .env
