@@ -1,0 +1,15 @@
+# This file also applies when the Lab 4 fork is cloned on its own.
+.gradle/
+build/
+out/
+*.class
+*.log
+.idea/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example

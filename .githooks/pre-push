@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eu
 
-# Only publishing the course's main branch should update the standalone fork.
-# In particular, the nested push to lab2-fork must not run this sync again.
+# Only publishing the course's main branch should update the standalone forks.
+# In particular, nested pushes to the lab remotes must not run this sync again.
 [ "${1:-}" = origin ] || exit 0
 
 course_commit=
@@ -15,32 +15,47 @@ while read -r local_ref local_oid remote_ref remote_oid; do
 done
 [ -n "$course_commit" ] || exit 0
 
-prefix=Lab2-Java/arrays-cs-project
-if ! git remote get-url --push lab2-fork >/dev/null 2>&1; then
-    echo >&2 'Arrays sync: missing lab2-fork remote. See the README fresh-clone setup.'
-    exit 1
-fi
+check_subtree() {
+    prefix=$1
+    remote=$2
+    if ! git remote get-url --push "$remote" >/dev/null 2>&1; then
+        echo >&2 "Lab sync: missing $remote remote. See the README fresh-clone setup."
+        exit 1
+    fi
 
-if [ "$(git cat-file -t "$course_commit:$prefix" 2>/dev/null || true)" != tree ]; then
-    echo >&2 "Arrays sync: $prefix is missing from the commit being pushed. Course push stopped."
-    exit 1
-fi
+    if [ "$(git cat-file -t "$course_commit:$prefix" 2>/dev/null || true)" != tree ]; then
+        echo >&2 "Lab sync: $prefix is missing from the commit being pushed. Course push stopped."
+        exit 1
+    fi
+}
 
-echo >&2 'Arrays sync: exporting the arrays project from the course commit being pushed...'
-# Do not use --rejoin here: a push hook must not move HEAD or create a merge
-# after Git has already selected the commit to publish. Uncommitted files are
-# deliberately excluded, and HEAD might be on a different branch.
-if ! split_commit=$(git subtree split --quiet --prefix="$prefix" "$course_commit"); then
-    echo >&2 'Arrays sync: subtree export failed. Course push stopped.'
-    exit 1
-fi
+sync_subtree() {
+    prefix=$1
+    remote=$2
+    branch=$3
+    echo >&2 "Lab sync: exporting $prefix from the course commit being pushed..."
+    # Do not use --rejoin here: a push hook must not move HEAD or create a merge
+    # after Git has already selected the commit to publish. Uncommitted files are
+    # deliberately excluded, and HEAD might be on a different branch.
+    if ! split_commit=$(git subtree split --quiet --prefix="$prefix" "$course_commit"); then
+        echo >&2 "Lab sync: $prefix export failed. Course push stopped."
+        exit 1
+    fi
 
-# Explicitly disable force and automatic tag publication for the fork push,
-# even if the outer course push was forced or push.followTags is configured.
-if ! git push --no-force --no-follow-tags lab2-fork "$split_commit:refs/heads/master" </dev/null; then
-    echo >&2 'Arrays sync: fork push failed. Course push stopped.'
-    echo >&2 'If the fork has newer commits, follow the README instructions to bring its updates into the course, then retry.'
-    exit 1
-fi
+    # Explicitly disable force and automatic tag publication for each fork push,
+    # even if the outer course push was forced or push.followTags is configured.
+    if ! git push --no-force --no-follow-tags "$remote" "$split_commit:refs/heads/$branch" </dev/null; then
+        echo >&2 "Lab sync: $remote push failed. Course push stopped."
+        echo >&2 'If the fork has newer commits, follow the README instructions to bring its updates into the course, then retry.'
+        exit 1
+    fi
+}
 
-echo >&2 'Arrays sync: fork is up to date; continuing the course push.'
+# Check both configurations before updating either fork.
+check_subtree Lab2-Java/arrays-cs-project lab2-fork
+check_subtree Lab4-Java lab4-fork
+
+sync_subtree Lab2-Java/arrays-cs-project lab2-fork master
+sync_subtree Lab4-Java lab4-fork main
+
+echo >&2 'Lab sync: both forks are up to date; continuing the course push.'

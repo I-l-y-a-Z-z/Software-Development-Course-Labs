@@ -14,6 +14,17 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="delegatedBuild" value="false" />
+        <option name="testRunner" value="PLATFORM" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Lab4-Java/challenge" />
+        <option name="gradleJvm" value="#PROJECT_JDK" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Lab4-Java/challenge" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>
