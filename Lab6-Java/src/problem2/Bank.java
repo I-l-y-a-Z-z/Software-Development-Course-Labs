@@ -38,7 +38,7 @@ public class Bank {
             return false;
         }
         System.out.println("Bank: " + name);
-        System.out.println("Customer: " + customer.getName());
+        System.out.println("Customer: Mr." + customer.getName());
         for (double amount : customer.getTransactions()){
             System.out.printf("%.2f%n", amount);
         }
