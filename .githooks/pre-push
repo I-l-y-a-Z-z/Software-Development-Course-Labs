@@ -51,11 +51,13 @@ sync_subtree() {
     fi
 }
 
-# Check both configurations before updating either fork.
+# Check every configuration before updating any fork.
 check_subtree Lab2-Java/arrays-cs-project lab2-fork
 check_subtree Lab4-Java lab4-fork
+check_subtree Lab6-Java lab6-fork
 
 sync_subtree Lab2-Java/arrays-cs-project lab2-fork master
 sync_subtree Lab4-Java lab4-fork main
+sync_subtree Lab6-Java lab6-fork master
 
-echo >&2 'Lab sync: both forks are up to date; continuing the course push.'
+echo >&2 'Lab sync: all forks are up to date; continuing the course push.'
