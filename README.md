@@ -6,6 +6,7 @@ Java exercises for the software development course.
 - `Lab3-Java/src/`: exercises `ex1` through `ex10`, each with a `Main` class.
 - `Lab4-Java/challenge/`: Lab 4 Gradle project, imported from
   [Lab4-problems-](https://github.com/fahd-kalloubi/Lab4-problems-).
+- `Lab5-Java/src/`: Lab 5 Java module with a starter `Main` class.
 - `Lab6-Java/src/`: Lab 6 Java exercises, imported from
   [lab6-problems](https://github.com/fahd-kalloubi/lab6-problems).
 
