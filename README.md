@@ -9,6 +9,8 @@ Java exercises for the software development course.
 - `Lab5-Java/src/`: Lab 5 Java module with a starter `Main` class.
 - `Lab6-Java/src/`: Lab 6 Java exercises, imported from
   [lab6-problems](https://github.com/fahd-kalloubi/lab6-problems).
+- `Lab7-Java/`: Lab 7 assignment, lecture, and Java module.
+  Problem 1 in `src/problem1/` implements the lecture's interface challenge.
 
 ## Run the exercises
 
@@ -35,6 +37,14 @@ cd Lab4-Java/challenge
 
 To add another lab, create a Java module in IntelliJ and commit its `src` folder,
 `.iml` file, and the updated `.idea/modules.xml`.
+
+Run Lab 7 Problem 1 from the repository root:
+
+```bash
+mkdir -p out/Lab7
+javac --release 17 -d out/Lab7 Lab7-Java/src/problem1/*.java
+java -cp out/Lab7 problem1.Main
+```
 
 ## Save and push
 
